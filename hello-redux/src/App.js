@@ -1,54 +1,62 @@
-import React, { createRef } from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link, 
+  useParams
+} from "react-router-dom";
 
-const Item = ({ name, price }) => (
-  <li>
-    {name}, ${price}
-  </li>
-)
+const users = [
+  {id:1, name:"Mg Mg", gender:"m"},
+  {id:2, name:"Zaw Zaw", gender:"m"},
+  {id:3, name:"Hla Hla", gender:"f"},
+  {id:4, name:"Mya Mya", gender:"f"},
+];
 
-const App = props => {
-  let nameRef = createRef();
-  let priceRef = createRef();
-
-  let add = () => {
-    props.add(
-      props.items.length + 1,
-      nameRef.current.value,
-      priceRef.current.value
-    );
-  }
-
+const Male = props => {
   return (
     <div>
       <ul>
-        {props.items.map(i => (
-          <Item key={i.id} name={i.name} price={i.price} />
-        ))}
+        {users.filter(u => u.gender === "m").map(i => <li key={i.id}>{i.name}</li>)}
       </ul>
-      <input type="text" ref={nameRef}></input> <br/>
-      <input type="text" ref={priceRef}></input> <br />
-      <button onClick={add}>Submit</button>
     </div>
   )
 }
 
-const stateToProps = state => {
-  return {
-    items:state
-  }
+const Female = props => {
+  return (
+    <div>
+      <ul>
+        {users.filter(u => u.gender === "f").map(i => <li key={i.id}>{i.name}</li>)}
+      </ul>
+    </div>
+  )
 }
 
-const dispatchToProps = dispatch => {
-  return {
-    add: (id, name, price) => {
-      dispatch({
-        type: "ADD",
-        items: {id, name, price}
-      });
-    }
-  }
+const User = props => {
+  const { name } = useParams();
+  return (
+    <h1>User {name}</h1>
+  )
 }
 
-const ReduxApp = connect(stateToProps, dispatchToProps)(App);
-export default ReduxApp;
+const App = props => {
+  return (
+    <Router>
+      <div>
+        <ul>
+          <li><Link to="user/alice">Alice</Link></li>
+          <li><Link to="user/bob">Bob</Link></li>
+        </ul>
+      </div>
+      <div style={{background: "cyan", padding: 20}}>
+        <Routes>
+          <Route path="/user/:name" exact element={<User/>}></Route>
+        </Routes>
+      </div>
+    </Router>
+  )
+}
+
+export default App;

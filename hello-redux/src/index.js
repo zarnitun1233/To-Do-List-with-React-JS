@@ -6,9 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
-const store = createStore((state = [{id:1, name: "Banana", price: "1"},{id:2, name: "Orange", price: "2"}], action) => {
+const store = createStore((state = [], action) => {
   if (action.type === "ADD") {
-    return [...state, action.items]
+    return [...state, action.items];
   }
   return state;
 });
@@ -17,8 +17,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
-      </Provider>
+      <App></App>
+   </Provider>
   </React.StrictMode>
 );
 
